@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Signature Verification</title>
+  <meta name="description" content="Enrol signatures and verify new ones with a Siamese CNN, entirely in your browser." />
+  <link rel="icon" href="icon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="masthead">
+    <div class="wrap">
+      <div class="brand">
+        <img src="icon.svg" alt="" width="36" height="36" />
+        <div>
+          <h1>Signature Verification</h1>
+          <p>Siamese CNN, running on this device</p>
+        </div>
+      </div>
+      <nav class="tabs" role="tablist">
+        <button role="tab" aria-selected="true" data-tab="verify">Verify</button>
+        <button role="tab" aria-selected="false" data-tab="enrol">Enrol a person</button>
+        <button role="tab" aria-selected="false" data-tab="people">People <span id="people_count">0</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <p class="status" id="status" role="status">Loading the model…</p>
+
+    <section id="tab_verify" class="sheet" role="tabpanel">
+      <h2>Verify a signature</h2>
+      <p class="lede">Choose who the signature claims to belong to, then draw or upload it.</p>
+      <label class="field">
+        <span>Claimed signer</span>
+        <select id="verify_person"></select>
+      </label>
+      <div id="verify_capture"></div>
+      <button class="primary" id="verify_button" disabled>Verify signature</button>
+      <div id="verify_result" class="result" hidden></div>
+    </section>
+
+    <section id="tab_enrol" class="sheet" role="tabpanel" hidden>
+      <h2>Enrol a person</h2>
+      <p class="lede">Add at least three genuine signatures from the same person. More samples make verification more reliable.</p>
+      <label class="field">
+        <span>Full name</span>
+        <input id="enrol_name" maxlength="80" placeholder="e.g. Priya Das" />
+      </label>
+      <div id="enrol_capture"></div>
+      <button class="secondary" id="enrol_add" disabled>Add this signature</button>
+      <ul class="samples" id="enrol_samples"></ul>
+      <button class="primary" id="enrol_save" disabled>Save person</button>
+      <p class="note" id="enrol_note"></p>
+    </section>
+
+    <section id="tab_people" class="sheet" role="tabpanel" hidden>
+      <h2>Enrolled people</h2>
+      <p class="lede">Signatures are stored only in this browser. Download a backup to move them to another device.</p>
+      <div class="row">
+        <button class="secondary" id="export_button">Download backup</button>
+        <label class="secondary file-button">Restore backup<input type="file" id="import_file" accept="application/json,.json" hidden /></label>
+      </div>
+      <ul class="people" id="people_list"></ul>
+    </section>
+  </main>
+
+  <template id="capture_template">
+    <div class="capture">
+      <div class="capture-modes" role="group" aria-label="How to add the signature">
+        <button type="button" data-mode="draw" aria-pressed="true">Draw</button>
+        <button type="button" data-mode="upload" aria-pressed="false">Upload image</button>
+      </div>
+      <div class="pad-wrap" data-panel="draw">
+        <canvas class="pad" width="900" height="300" aria-label="Signature pad"></canvas>
+        <div class="baseline" aria-hidden="true"></div>
+        <button type="button" class="link clear">Clear</button>
+      </div>
+      <label class="drop" data-panel="upload" hidden>
+        <input type="file" accept="image/*" hidden />
+        <img alt="" hidden />
+        <span>Choose a photo or scan of the signature on plain paper</span>
+      </label>
+      <figure class="processed" hidden>
+        <canvas width="128" height="128"></canvas>
+        <figcaption>What the model sees</figcaption>
+      </figure>
+    </div>
+  </template>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

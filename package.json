@@ -1,0 +1,8 @@
+{
+  "name": "signature-verification",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/parity.test.mjs"
+  }
+}
